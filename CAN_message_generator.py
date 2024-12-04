@@ -3,9 +3,13 @@ from PyQt6.QtWidgets import (QMainWindow, QApplication, QLineEdit, QMessageBox,
                             QTableWidgetItem, QWidget, QVBoxLayout, QHBoxLayout,
                             QGroupBox, QFormLayout, QLabel, QRadioButton, QPushButton, QComboBox)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QColor, QIcon
+import base64
+from io import BytesIO
 
 class MyApp(QMainWindow):
+    ICON_BASE64 = "YOUR_BASE64_STRING_HERE"  # 这里替换为实际的 base64 字符串
+    
     def __init__(self):
         super().__init__()
         self.initData()
@@ -41,6 +45,12 @@ class MyApp(QMainWindow):
     def initUI(self):
         """初始化UI"""
         self.setWindowTitle("CAN报文生成工具 v1.0 @ChangXiaoqiang")
+        
+        # 设置应用图标
+        icon_data = base64.b64decode(self.ICON_BASE64)
+        icon_pixmap = QIcon()
+        icon_pixmap.addPixmap(QPixmap.fromImage(QImage.fromData(icon_data)))
+        self.setWindowIcon(icon_pixmap)
         
         # 设置窗口大小
         window_width = 825
@@ -303,7 +313,7 @@ class MyApp(QMainWindow):
             byte = hex(int(byte_str, 2)).upper().lstrip("0X").zfill(2)  # 转换为16进制
             message.append(byte)
         
-        # 输出报��
+        # 输出报
         self.message_le.setText(" ".join(message))
 
     def CANMessage_msb(self):
@@ -655,7 +665,7 @@ class MyApp(QMainWindow):
         self.CAN = [0] * (self.byte_count * 8)
         self.updateTable()
         
-        # 清空所有输���框
+        # 清空所有输框
         self.startbit_le.clear()
         self.bitlength_le.clear()
         self.resolution_le.clear()
